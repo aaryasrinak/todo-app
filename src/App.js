@@ -1,29 +1,24 @@
 import './App.scss';
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
+import Image from 'react-bootstrap/Image';
 
 function App() {
   return (
-
-    <Container fluid="xs" className="bg-dark">
-      <Row>
-        <Col>1 of 1</Col>
-      </Row>
-
-      <Stack gap={3} className="col-md-5 mx-auto">
-        <div className="bg-light border">First item</div>
-        <div className="bg-light border ms-auto">Second item</div>
-        <div className="vr" />
-        <div className="bg-light border">Third item</div>
-        <Button variant="primary">Primary</Button>{' '}
+    <>
+      <Stack className="bg-dark-vvd-grayish-blue">
+        <Image src="bg-desktop-dark.jpg" />
+        <Stack gap={3} className="w-50 mx-auto">
+          <p className="h2 fw-bold text-white">T O D O</p>
+          <div className="bg-light border">First item</div>
+          <div className="bg-light border ms-auto">Second item</div>
+          <div className="vr" />
+          <div className="bg-light border lh-1">TEst</div>
+          <Button className="lh-1 bg-light-d-grayish-blue">Primary</Button>{' '}
+        </Stack>
       </Stack>
-    </Container>
-
-
+    </>
   );
 }
 
