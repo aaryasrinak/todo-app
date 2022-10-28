@@ -26,6 +26,7 @@ $line-height-base: 1.5;
 $line-height-sm: 1.25;
 $line-height-lg: 2;
 
+$enable-rfs: false;
 
 // 3. Include remainder of required Bootstrap stylesheets
 @import "../node_modules/bootstrap/scss/variables";
@@ -68,18 +69,18 @@ $container-max-widths: (
 // - Very Dark Grayish Blue: hsl(233, 14%, 35%)
 // - Very Dark Grayish Blue: hsl(237, 14%, 26%)
 $custom-colors: (
-  "light-vl-gray":hsl(0, 0%, 98%),
-  "light-vl-grayish-blue":hsl(236, 33%, 92%),
-  "light-l-grayish-blue":hsl(233, 11%, 84%),
-  "light-d-grayish-blue":hsl(236, 9%, 61%),
-  "light-vd-grayish-blue":hsl(235, 19%, 35%),
-  "dark-vd-blue":hsl(235, 21%, 11%),
-  "dark-vd-desaturated-blue":hsl(235, 24%, 19%),
-  "dark-l-grayish-blue":hsl(234, 39%, 85%),
-  "dark-l-grayish-blue-hover":hsl(236, 33%, 92%),
-  "dark-d-grayish-blue":hsl(234, 11%, 52%),
-  "dark-vd-grayish-blue":hsl(233, 14%, 35%),
-  "dark-vvd-grayish-blue":hsl(237, 14%, 26%),
+  "vl-gray":hsl(0, 0%, 98%),
+  "vl-grayish-blue":hsl(236, 33%, 92%),
+  "l-grayish-blue":hsl(233, 11%, 84%),
+  "d-grayish-blue":hsl(236, 9%, 61%),
+  "vd-grayish-blue":hsl(235, 19%, 35%),
+  "dk-vd-blue":hsl(235, 21%, 11%),
+  "dk-vd-desaturated-blue":hsl(235, 24%, 19%),
+  "dk-l-grayish-blue":hsl(234, 39%, 85%),
+  "dk-l-grayish-blue-hover":hsl(236, 33%, 92%),
+  "dk-d-grayish-blue":hsl(234, 11%, 52%),
+  "dk-vd-grayish-blue":hsl(233, 14%, 35%),
+  "dk-vvd-grayish-blue":hsl(237, 14%, 26%),
   "bright-blue":hsl(220, 98%, 61%),
   "check-background-from":hsl(192, 100%, 67%),
   "check-background-to":hsl(280, 87%, 65%),

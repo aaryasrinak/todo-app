@@ -1,0 +1,51 @@
+// ### Primary
+// - Bright Blue: hsl(220, 98%, 61%)
+// - Check Background: linear-gradient hsl(192, 100%, 67%) to hsl(280, 87%, 65%)
+$bright-blue: hsl(220, 98%, 61%);
+$check-background-from: hsl(192, 100%, 67%);
+$check-background-to: hsl(280, 87%, 65%);
+
+// ### Light Theme
+// - Very Light Gray: hsl(0, 0%, 98%)
+// - Very Light Grayish Blue: hsl(236, 33%, 92%)
+// - Light Grayish Blue: hsl(233, 11%, 84%)
+// - Dark Grayish Blue: hsl(236, 9%, 61%)
+// - Very Dark Grayish Blue: hsl(235, 19%, 35%)
+$vl-gray: hsl(0, 0%, 98%);
+$vl-grayish-blue: hsl(236, 33%, 92%);
+$l-grayish-blue: hsl(233, 11%, 84%);
+$d-grayish-blue: hsl(236, 9%, 61%);
+$vd-grayish-blue: hsl(235, 19%, 35%);
+.lightmode {
+    .main {
+        background-color: hsl(236, 33%, 92%); //Very Light Grayish Blue
+    }
+    .todo {
+        background-color: hsl(0, 0%, 98%); //Very Light Gray
+    }
+}
+
+// ### Dark Theme
+// - Very Dark Blue: hsl(235, 21%, 11%)
+// - Very Dark Desaturated Blue: hsl(235, 24%, 19%)
+// - Light Grayish Blue: hsl(234, 39%, 85%)
+// - Light Grayish Blue (hover): hsl(236, 33%, 92%)
+// - Dark Grayish Blue: hsl(234, 11%, 52%)
+// - Very Dark Grayish Blue: hsl(233, 14%, 35%)
+// - Very Dark Grayish Blue: hsl(237, 14%, 26%)
+$dk-vd-blue: hsl(235, 21%, 11%);
+$dk-vd-desaturated-blue: hsl(235, 24%, 19%);
+$dk-l-grayish-blue: hsl(234, 39%, 85%);
+$dk-l-grayish-blue-hover: hsl(236, 33%, 92%);
+$dk-d-grayish-blue: hsl(234, 11%, 52%);
+$dk-vd-grayish-blue: hsl(233, 14%, 35%);
+$dk-vvd-grayish-blue: hsl(237, 14%, 26%);
+.darkmode {
+    .main {
+        background-color: hsl(235, 21%, 11%);
+    }
+    .todo {
+        background-color: hsl(237, 14%, 26%); //Very Dark Grayish Blue
+    }
+}
+

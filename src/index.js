@@ -4,12 +4,15 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ThemeProvider from 'react-bootstrap/ThemeProvider';
+import { ColorModeContextProvider } from './contexts/ColorModeContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ThemeProvider breakpoints={['xxl', 'xl', 'lg', 'md', 'sm', 'xs']} minBreakpoint="xs">
-      <App />
+      <ColorModeContextProvider>
+        <App />
+      </ColorModeContextProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
