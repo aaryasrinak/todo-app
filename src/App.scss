@@ -16,11 +16,21 @@ $vl-grayish-blue: hsl(236, 33%, 92%);
 $l-grayish-blue: hsl(233, 11%, 84%);
 $d-grayish-blue: hsl(236, 9%, 61%);
 $vd-grayish-blue: hsl(235, 19%, 35%);
+
 .lightmode {
     .main {
         background-color: hsl(236, 33%, 92%); //Very Light Grayish Blue
     }
+
     .todo {
+        background-color: hsl(0, 0%, 98%); //Very Light Gray
+    }
+
+    input[type="text"] {
+        color: hsl(235, 19%, 35%);
+    }
+
+    .bottom-bar {
         background-color: hsl(0, 0%, 98%); //Very Light Gray
     }
 }
@@ -40,12 +50,101 @@ $dk-l-grayish-blue-hover: hsl(236, 33%, 92%);
 $dk-d-grayish-blue: hsl(234, 11%, 52%);
 $dk-vd-grayish-blue: hsl(233, 14%, 35%);
 $dk-vvd-grayish-blue: hsl(237, 14%, 26%);
+
 .darkmode {
     .main {
         background-color: hsl(235, 21%, 11%);
     }
+
     .todo {
+        background-color: hsl(237, 14%, 26%); //Very Dark Grayish Blue
+    }
+
+    input[type="text"] {
+        color: hsl(234, 39%, 85%);
+    }
+
+    .bottom-bar {
         background-color: hsl(237, 14%, 26%); //Very Dark Grayish Blue
     }
 }
 
+// https://moderncss.dev/pure-css-custom-checkbox-style/
+
+.checkbox-hiding {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 to remove gradient background */
+    background-color: #fff;
+    /* Not removed via appearance */
+    margin: 0;
+}
+
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    // background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: hsl(236, 33%, 92%);
+    width: 1.5em;
+    height: 1.5em;
+    border: 0.12em solid currentColor;
+    border-radius: 50%;
+    transform: translateY(-0.075em);
+
+    display: grid;
+    place-content: center;
+
+    &:checked {
+        border: 0.12em;
+        background: linear-gradient(135deg, hsl(192, 100%, 67%) 0%,hsl(280, 87%, 65%) 100%);
+    }
+}
+
+input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em currentColor;
+    transform-origin: bottom left;
+    color: white;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+input[type="checkbox"]:disabled {
+    --form-control-color: #959495;
+
+    color: #959495;
+    cursor: not-allowed;
+}
+
+input[type="text"] {
+    outline: none;
+    color: hsl(235, 19%, 35%);
+    background-color: transparent;
+    &::placeholder {
+        color: hsl(236, 9%, 61%);
+    }
+}
+
+.bottom-bar {
+    font-size: 14px;
+    color: hsl(236, 9%, 61%);
+    padding: 1rem 1rem 1rem 1rem;
+    border-top: 0.12em solid hsl(233, 11%, 84%);
+    .bottom-bar-filter {
+        font-size: 14px;
+        font-weight: 700;
+        div:hover {
+            cursor: pointer;
+        }
+    }
+}

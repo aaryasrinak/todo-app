@@ -6,7 +6,7 @@ import { ColorModeContext } from './contexts/ColorModeContext';
 import Image from 'react-bootstrap/Image';
 import Stack from 'react-bootstrap/Stack';
 
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 
 // SVG Icon from
 // https://icons.getbootstrap.com/#usage
@@ -39,7 +39,7 @@ function App() {
 
 
         <div className="position-absolute w-100 mt-5">
-          <Stack gap={3} className="w-50 mx-auto">
+          <Stack gap={4} className="w-50 mx-auto">
             <div className="d-flex flex-row justify-content-between align-content-center">
               <div className="fs-2 fw-bold text-vl-gray">T O D O</div>
               {colorMode === "light" ?
@@ -59,16 +59,36 @@ function App() {
               }
             </div>
 
-            <div className="todo d-flex flex-row justify-content-between align-content-center">
-              <input className="" type="checkbox" />
-              <input id="todo" className="flex-grow-1" type="text" />
+            <div className="todo d-flex flex-row justify-content-between align-content-center rounded">
+              <input className="m-4" type="checkbox" />
+              <input id="todo" className="flex-grow-1 border border-0 me-2" type="text" placeholder='Create a new todo...' />
             </div>
 
-            <div className="bg-dark-vvd-grayish-blue border">First item</div>
-            <div className="bg-light border ms-auto">Second item</div>
-            <div className="vr" />
-            <div className="bg-light border lh-1">TEst</div>
-            <Button className="lh-1 bg-light-d-grayish-blue">Primary</Button>{' '}
+            <Stack>
+              <div className="todo d-flex flex-row justify-content-between align-content-center rounded-top">
+                <input className="m-4" type="checkbox" />
+                <input id="todo" className="flex-grow-1 border border-0 me-2" type="text" placeholder='Create a new todo...' />
+              </div>
+              <div className="todo d-flex flex-row justify-content-between align-content-center">
+                <input className="m-4" type="checkbox" />
+                <input id="todo" className="flex-grow-1 border border-0 me-2" type="text" placeholder='Create a new todo...' />
+              </div>
+              <div className="bottom-bar d-flex flex-row justify-content-between align-content-center rounded-bottom">
+                <div >
+                  0 items left
+                </div>
+                <div className="bottom-bar-filter d-flex flex-row gap-3">
+                  <div>All</div>
+                  <div>Active</div>
+                  <div>Completed</div>
+                </div>
+                <div>
+                Clear Completed
+                </div>
+              </div>
+            </Stack>
+
+
           </Stack>
         </div>
 
