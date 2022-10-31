@@ -135,11 +135,14 @@ input[type="text"] {
     }
 }
 
+.border-top-gray {
+    border-top: 0.05em solid hsl(233, 11%, 84%);
+}
+
 .bottom-bar {
     font-size: 14px;
     color: hsl(236, 9%, 61%);
     padding: 1rem 1rem 1rem 1rem;
-    border-top: 0.12em solid hsl(233, 11%, 84%);
     .bottom-bar-filter {
         font-size: 14px;
         font-weight: 700;
@@ -147,4 +150,9 @@ input[type="text"] {
             cursor: pointer;
         }
     }
+}
+
+.bottom-text {
+    font-size: 14px;
+    color: hsl(236, 9%, 61%);
 }

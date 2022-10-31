@@ -1,6 +1,6 @@
 import './App.scss';
 
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ColorModeContext } from './contexts/ColorModeContext';
 
 import Image from 'react-bootstrap/Image';
@@ -8,11 +8,51 @@ import Stack from 'react-bootstrap/Stack';
 
 // import Button from 'react-bootstrap/Button';
 
+import Todo from './components/todo';
+
+
 // SVG Icon from
 // https://icons.getbootstrap.com/#usage
 
 function App() {
   const { colorMode, setColorMode } = useContext(ColorModeContext);
+  const [db, setDb] = useState();
+  const [metadata, setMetadata] = useState([]);
+
+  useEffect(() => {
+    const DBOpenRequest = window.indexedDB.open("todo", 2);
+    DBOpenRequest.onerror = (event) => {
+      console.log('Error loading database.');
+    };
+
+    DBOpenRequest.onsuccess = (event) => {
+      console.log('Database initialised.');
+      setDb(DBOpenRequest.result);
+      // displayData();
+    };
+
+    DBOpenRequest.onupgradeneeded = (event) => {
+      setDb(event.target.result);
+
+      db.onerror = (event) => {
+        console.log('Error loading database.');
+      };
+
+      const objectStore = db.createObjectStore('toDoList', { keyPath: 'taskTitle' });
+
+      // Define what data items the objectStore will contain
+      objectStore.createIndex('hours', 'hours', { unique: false });
+      objectStore.createIndex('minutes', 'minutes', { unique: false });
+      objectStore.createIndex('day', 'day', { unique: false });
+      objectStore.createIndex('month', 'month', { unique: false });
+      objectStore.createIndex('year', 'year', { unique: false });
+
+      objectStore.createIndex('notified', 'notified', { unique: false });
+
+      console.log('Object store created.');
+    };
+
+  }, []);
 
   useEffect(() => {
     if (colorMode === "light") {
@@ -21,6 +61,14 @@ function App() {
       document.body.style.backgroundColor = "#161722";
     }
   }, [colorMode]);
+
+  const editTodo = (id, todo) => {
+    if (id) {
+      console.log(`todo: ${id} ${todo}`);
+    } else {
+      console.log(`todo: ${id} ${todo}`);
+    }
+  }
 
   return (
     <div className={colorMode === "light" ? "lightmode" : "darkmode"}>
@@ -59,21 +107,14 @@ function App() {
               }
             </div>
 
-            <div className="todo d-flex flex-row justify-content-between align-content-center rounded">
-              <input className="m-4" type="checkbox" />
-              <input id="todo" className="flex-grow-1 border border-0 me-2" type="text" placeholder='Create a new todo...' />
-            </div>
+            <Todo roundedTop roundedBottom editTodo={editTodo} />
 
             <Stack>
-              <div className="todo d-flex flex-row justify-content-between align-content-center rounded-top">
-                <input className="m-4" type="checkbox" />
-                <input id="todo" className="flex-grow-1 border border-0 me-2" type="text" placeholder='Create a new todo...' />
-              </div>
-              <div className="todo d-flex flex-row justify-content-between align-content-center">
-                <input className="m-4" type="checkbox" />
-                <input id="todo" className="flex-grow-1 border border-0 me-2" type="text" placeholder='Create a new todo...' />
-              </div>
-              <div className="bottom-bar d-flex flex-row justify-content-between align-content-center rounded-bottom">
+              <Todo roundedTop />
+              <Todo borderTop />
+              <Todo borderTop />
+              <Todo borderTop />
+              <div className="bottom-bar border-top-gray d-flex flex-row justify-content-between align-content-center rounded-bottom">
                 <div >
                   0 items left
                 </div>
@@ -83,14 +124,19 @@ function App() {
                   <div>Completed</div>
                 </div>
                 <div>
-                Clear Completed
+                  Clear Completed
                 </div>
               </div>
             </Stack>
 
+            <div className="bottom-text mt-4 mx-auto">
+              Drag and drop to reorder list
+            </div>
 
           </Stack>
         </div>
+
+
 
       </Stack>
     </div>
