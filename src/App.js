@@ -32,22 +32,28 @@ function App() {
     };
 
     DBOpenRequest.onupgradeneeded = (event) => {
-      setDb(event.target.result);
+      const resDb = event.target.result;
+      setDb(resDb);
 
-      db.onerror = (event) => {
-        console.log('Error loading database.');
+      resDb.onerror = (event) => {
+        console.log('onupgradeneeded / Error loading database.');
+        console.log(`Database error: ${event.target.errorCode}`);
       };
 
-      const objectStore = db.createObjectStore('toDoList', { keyPath: 'taskTitle' });
+      const objectStore = resDb.createObjectStore('toDoList', { keyPath: 'todoId' });
+      objectStore.createIndex('todoTitle', 'todoTitle', { unique: false });
+      objectStore.createIndex('checked', 'checked', { unique: false });
 
-      // Define what data items the objectStore will contain
-      objectStore.createIndex('hours', 'hours', { unique: false });
-      objectStore.createIndex('minutes', 'minutes', { unique: false });
-      objectStore.createIndex('day', 'day', { unique: false });
-      objectStore.createIndex('month', 'month', { unique: false });
-      objectStore.createIndex('year', 'year', { unique: false });
-
-      objectStore.createIndex('notified', 'notified', { unique: false });
+      // Use transaction oncomplete to make sure the objectStore creation is
+      // finished before adding data into it.
+      objectStore.transaction.oncomplete = (event) => {
+        console.log('objectStore.transaction.oncomplete', event);
+        // // Store values in the newly created objectStore.
+        // const customerObjectStore = db.transaction("toDoList", "readwrite").objectStore("toDoList");
+        // customerData.forEach((customer) => {
+        //   customerObjectStore.add(customer);
+        // });
+      };
 
       console.log('Object store created.');
     };
