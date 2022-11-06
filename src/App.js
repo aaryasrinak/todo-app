@@ -10,53 +10,18 @@ import Stack from 'react-bootstrap/Stack';
 
 import Todo from './components/todo';
 
+import { transactionOnSuccess, transactionOnError } from './libs/indexedDB';
 
 // SVG Icon from
 // https://icons.getbootstrap.com/#usage
 
 function App() {
   const { colorMode, setColorMode } = useContext(ColorModeContext);
-  const [db, setDb] = useState();
+  const [db, setDb] = useState(null);
   const [metadata, setMetadata] = useState([]);
 
   useEffect(() => {
-    const DBOpenRequest = window.indexedDB.open("todo", 2);
-    DBOpenRequest.onerror = (event) => {
-      console.log('Error loading database.');
-    };
 
-    DBOpenRequest.onsuccess = (event) => {
-      console.log('Database initialised.');
-      setDb(DBOpenRequest.result);
-      // displayData();
-    };
-
-    DBOpenRequest.onupgradeneeded = (event) => {
-      const resDb = event.target.result;
-      setDb(resDb);
-
-      resDb.onerror = (event) => {
-        console.log('onupgradeneeded / Error loading database.');
-        console.log(`Database error: ${event.target.errorCode}`);
-      };
-
-      const objectStore = resDb.createObjectStore('toDoList', { keyPath: 'todoId' });
-      objectStore.createIndex('todoTitle', 'todoTitle', { unique: false });
-      objectStore.createIndex('checked', 'checked', { unique: false });
-
-      // Use transaction oncomplete to make sure the objectStore creation is
-      // finished before adding data into it.
-      objectStore.transaction.oncomplete = (event) => {
-        console.log('objectStore.transaction.oncomplete', event);
-        // // Store values in the newly created objectStore.
-        // const customerObjectStore = db.transaction("toDoList", "readwrite").objectStore("toDoList");
-        // customerData.forEach((customer) => {
-        //   customerObjectStore.add(customer);
-        // });
-      };
-
-      console.log('Object store created.');
-    };
 
   }, []);
 
@@ -72,10 +37,18 @@ function App() {
     if (id) {
       console.log(`todo: ${id} ${todo}`);
     } else {
-      console.log(`todo: ${id} ${todo}`);
+      const transaction = db.transaction(["toDoList"], "readwrite");
+      const objectStore = transaction.objectStore("toDoList");
+      const request = objectStore.add({ todoId: Date.now(), todoTitle: todo, checked: false });
+      request.onsuccess = transactionOnSuccess;
+      request.onerror = transactionOnError;
     }
   }
 
+  const clearComplete = () => {
+
+  }
+  
   return (
     <div className={colorMode === "light" ? "lightmode" : "darkmode"}>
       <Stack className="main">
@@ -129,7 +102,9 @@ function App() {
                   <div>Active</div>
                   <div>Completed</div>
                 </div>
-                <div>
+                <div role="button" className="cursor-pointer"
+                  onClick={() => {console.log('ccc')}}
+                >
                   Clear Completed
                 </div>
               </div>
