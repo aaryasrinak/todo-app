@@ -10,19 +10,28 @@ import Stack from 'react-bootstrap/Stack';
 
 import Todo from './components/todo';
 
-import { transactionOnSuccess, transactionOnError } from './libs/indexedDB';
+import { initDB, createTodo,  removeTodoAll } from './libs/indexedDB';
 
 // SVG Icon from
 // https://icons.getbootstrap.com/#usage
 
 function App() {
   const { colorMode, setColorMode } = useContext(ColorModeContext);
-  const [db, setDb] = useState(null);
   const [metadata, setMetadata] = useState([]);
+  const [todoList, setTodoList] = useState([]);
+
+  const aa = new Promise((resolve, reject) => {
+    resolve(10);
+  });
 
   useEffect(() => {
-
-
+    // initDB();
+    // getTodoAll()
+    // .then((data) => {
+    //   console.log(data);
+    // })
+    // .catch((err) => console.error(err));
+    aa.then(dat => console.log('dat', dat));
   }, []);
 
   useEffect(() => {
@@ -37,16 +46,12 @@ function App() {
     if (id) {
       console.log(`todo: ${id} ${todo}`);
     } else {
-      const transaction = db.transaction(["toDoList"], "readwrite");
-      const objectStore = transaction.objectStore("toDoList");
-      const request = objectStore.add({ todoId: Date.now(), todoTitle: todo, checked: false });
-      request.onsuccess = transactionOnSuccess;
-      request.onerror = transactionOnError;
+      createTodo({ todoId: Date.now(), todoTitle: todo, checked: false });
     }
   }
 
   const clearComplete = () => {
-
+    removeTodoAll();
   }
   
   return (
@@ -102,11 +107,7 @@ function App() {
                   <div>Active</div>
                   <div>Completed</div>
                 </div>
-                <div role="button" className="cursor-pointer"
-                  onClick={() => {console.log('ccc')}}
-                >
-                  Clear Completed
-                </div>
+                <div role="button" className="cursor-pointer" onClick={clearComplete}>Clear Completed</div>
               </div>
             </Stack>
 
