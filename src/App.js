@@ -19,6 +19,7 @@ function App() {
   const { colorMode, setColorMode } = useContext(ColorModeContext);
   const [DB, setDB] = useState(null);
   const [todoList, setTodoList] = useState([]);
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     initDB()
@@ -47,40 +48,40 @@ function App() {
 
   const addTodo = (todo) => {
     createTodo(DB, todo)
-    .then((item) => {
-      // console.log('addTodo', item);
-      setTodoList(prev => [...prev, item]);
-    });
+      .then((item) => {
+        // console.log('addTodo', item);
+        setTodoList(prev => [...prev, item]);
+      });
   }
 
   const updateTodo = (todo) => {
     editTodo(DB, todo)
-    .then((item) => {
-      // console.log('editTodo', item);
-      const newTodoList = todoList.map(it => {
-        if (it.todoId === item.todoId) {
-          return {
+      .then((item) => {
+        // console.log('editTodo', item);
+        const newTodoList = todoList.map(it => {
+          if (it.todoId === item.todoId) {
+            return {
               todoId: item.todoId,
               todoTitle: item.todoTitle,
               checked: item.checked
-          };
-        }
-        return it;
+            };
+          }
+          return it;
+        });
+        setTodoList(newTodoList);
       });
-      setTodoList(newTodoList);
-    });
   }
 
   const clearComplete = () => {
     deleteTodoCompleted(DB)
-    .then(() => {
-      getTodoAll(DB)
-      .then((data) => {
-        setTodoList(data);
+      .then(() => {
+        getTodoAll(DB)
+          .then((data) => {
+            setTodoList(data);
+          })
+          .catch((err) => console.error(err));
       })
-      .catch((err) => console.error(err));
-    })
-    .catch(err => console.error(err));
+      .catch(err => console.error(err));
   }
 
   return (
@@ -125,22 +126,47 @@ function App() {
             <Stack>
               {
                 todoList ?
-                  todoList.map((item, idx) => {
-                    if (idx === 0) return <Todo key={item.todoId} roundedTop todoItem={item} editTodo={updateTodo} />
-                    else return <Todo key={item.todoId} borderTop todoItem={item} editTodo={updateTodo} />
+                  todoList.filter(el => {
+                    if (filter === "active") {
+                      return el.checked === false;
+                    } else if (filter === "completed") {
+                      return el.checked === true;
+                    } else {
+                      return true;
+                    }
                   })
+                    .map((item, idx) => {
+                      if (idx === 0) return <Todo key={item.todoId} roundedTop todoItem={item} editTodo={updateTodo} />
+                      else return <Todo key={item.todoId} borderTop todoItem={item} editTodo={updateTodo} />
+                    })
                   :
                   <></>
               }
 
-              <div className="bottom-bar border-top-gray d-flex flex-row justify-content-between align-content-center rounded-bottom">
+              <div className={`
+                bottom-bar d-flex flex-row justify-content-between align-content-center rounded-bottom 
+                ${
+                  todoList.filter(el => {
+                    if (filter === "active") {
+                      return el.checked === false;
+                    } else if (filter === "completed") {
+                      return el.checked === true;
+                    } else {
+                      return true;
+                    }
+                  }).length === 0 ?
+                  'rounded-top'
+                  :
+                  'border-top-gray'
+                }
+              `}>
                 <div >
                   {todoList.length} items left
                 </div>
                 <div className="bottom-bar-filter d-flex flex-row gap-3">
-                  <div>All</div>
-                  <div>Active</div>
-                  <div>Completed</div>
+                  <div onClick={() => setFilter('all')} className={`${filter === 'all' ? 'bright-blue' : ''}`}>All</div>
+                  <div onClick={() => setFilter('active')} className={`${filter === 'active' ? 'bright-blue' : ''}`}>Active</div>
+                  <div onClick={() => setFilter('completed')} className={`${filter === 'completed' ? 'bright-blue' : ''}`}>Completed</div>
                 </div>
                 <div role="button" className="cursor-pointer" onClick={clearComplete}>Clear Completed</div>
               </div>
@@ -155,8 +181,8 @@ function App() {
 
 
 
-      </Stack>
-    </div>
+      </Stack >
+    </div >
   );
 }
 
