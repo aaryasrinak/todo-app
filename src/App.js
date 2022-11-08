@@ -10,29 +10,32 @@ import Stack from 'react-bootstrap/Stack';
 
 import Todo from './components/todo';
 
-import { initDB, createTodo,  removeTodoAll } from './libs/indexedDB';
+import { initDB, getTodoAll, createTodo, editTodo, deleteTodoCompleted } from './libs/indexedDB';
 
 // SVG Icon from
 // https://icons.getbootstrap.com/#usage
 
 function App() {
   const { colorMode, setColorMode } = useContext(ColorModeContext);
-  const [metadata, setMetadata] = useState([]);
+  const [DB, setDB] = useState(null);
   const [todoList, setTodoList] = useState([]);
 
-  const aa = new Promise((resolve, reject) => {
-    resolve(10);
-  });
+  useEffect(() => {
+    initDB()
+      .then((db) => {
+        setDB(db);
+        getTodoAll(db)
+          .then((data) => {
+            setTodoList(data);
+          })
+          .catch((err) => console.error(err));
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   useEffect(() => {
-    // initDB();
-    // getTodoAll()
-    // .then((data) => {
-    //   console.log(data);
-    // })
-    // .catch((err) => console.error(err));
-    aa.then(dat => console.log('dat', dat));
-  }, []);
+    console.log('todoList', todoList);
+  }, [todoList]);
 
   useEffect(() => {
     if (colorMode === "light") {
@@ -42,18 +45,44 @@ function App() {
     }
   }, [colorMode]);
 
-  const editTodo = (id, todo) => {
-    if (id) {
-      console.log(`todo: ${id} ${todo}`);
-    } else {
-      createTodo({ todoId: Date.now(), todoTitle: todo, checked: false });
-    }
+  const addTodo = (todo) => {
+    createTodo(DB, todo)
+    .then((item) => {
+      // console.log('addTodo', item);
+      setTodoList(prev => [...prev, item]);
+    });
+  }
+
+  const updateTodo = (todo) => {
+    editTodo(DB, todo)
+    .then((item) => {
+      // console.log('editTodo', item);
+      const newTodoList = todoList.map(it => {
+        if (it.todoId === item.todoId) {
+          return {
+              todoId: item.todoId,
+              todoTitle: item.todoTitle,
+              checked: item.checked
+          };
+        }
+        return it;
+      });
+      setTodoList(newTodoList);
+    });
   }
 
   const clearComplete = () => {
-    removeTodoAll();
+    deleteTodoCompleted(DB)
+    .then(() => {
+      getTodoAll(DB)
+      .then((data) => {
+        setTodoList(data);
+      })
+      .catch((err) => console.error(err));
+    })
+    .catch(err => console.error(err));
   }
-  
+
   return (
     <div className={colorMode === "light" ? "lightmode" : "darkmode"}>
       <Stack className="main">
@@ -91,16 +120,22 @@ function App() {
               }
             </div>
 
-            <Todo roundedTop roundedBottom editTodo={editTodo} />
+            <Todo roundedTop roundedBottom addTodo={addTodo} />
 
             <Stack>
-              <Todo roundedTop />
-              <Todo borderTop />
-              <Todo borderTop />
-              <Todo borderTop />
+              {
+                todoList ?
+                  todoList.map((item, idx) => {
+                    if (idx === 0) return <Todo key={item.todoId} roundedTop todoItem={item} editTodo={updateTodo} />
+                    else return <Todo key={item.todoId} borderTop todoItem={item} editTodo={updateTodo} />
+                  })
+                  :
+                  <></>
+              }
+
               <div className="bottom-bar border-top-gray d-flex flex-row justify-content-between align-content-center rounded-bottom">
                 <div >
-                  0 items left
+                  {todoList.length} items left
                 </div>
                 <div className="bottom-bar-filter d-flex flex-row gap-3">
                   <div>All</div>
