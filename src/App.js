@@ -1,6 +1,6 @@
 import './App.scss';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { ColorModeContext } from './contexts/ColorModeContext';
 
 import Image from 'react-bootstrap/Image';
@@ -21,7 +21,17 @@ function App() {
   const [todoList, setTodoList] = useState([]);
   const [filter, setFilter] = useState("all");
 
+  useLayoutEffect(() => {
+    const cmode = localStorage.getItem('colorMode');
+    if (cmode) {
+      setColorMode(cmode);
+    } else {
+      localStorage.setItem('colorMode', colorMode);
+    }
+  });
+
   useEffect(() => {
+
     initDB()
       .then((db) => {
         setDB(db);
@@ -105,14 +115,14 @@ function App() {
             <div className="d-flex flex-row justify-content-between align-content-center">
               <div className="fs-2 fw-bold text-vl-gray">T O D O</div>
               {colorMode === "light" ?
-                <svg onClick={() => setColorMode("dark")}
+                <svg onClick={() => {setColorMode("dark");localStorage.setItem('colorMode', 'dark');}}
                   className="bi bi-moon-fill mt-1 text-vl-gray hover-pointer" width="32" height="32"
                   viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                 >
                   <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
                 </svg>
                 :
-                <svg onClick={() => setColorMode("light")}
+                <svg onClick={() => {setColorMode("light");localStorage.setItem('colorMode', 'light');}}
                   className="bi bi-sun-fill mt-1 text-vl-gray hover-pointer" width="36" height="36"
                   viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                 >
